@@ -5,7 +5,7 @@
   "minAppVersion": "1.5.0",
   "description": "长按右键进入批量选择模式，快速多选文件进行批量操作（移动、删除、标签等）",
   "author": "彭采士",
-  "authorUrl": "",
+  "authorUrl": "https://github.com/Xiaopeng212321414321413231/obsidian-batch-file-selector",
   "fundingUrl": "",
   "isDesktopOnly": false
 }
