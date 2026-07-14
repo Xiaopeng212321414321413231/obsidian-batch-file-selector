@@ -1,0 +1,11 @@
+{
+  "id": "batch-file-selector",
+  "name": "Batch File Selector",
+  "version": "1.0.0",
+  "minAppVersion": "1.5.0",
+  "description": "长按右键进入批量选择模式，快速多选文件进行批量操作（移动、删除、标签等）",
+  "author": "彭采士",
+  "authorUrl": "",
+  "fundingUrl": "",
+  "isDesktopOnly": false
+}

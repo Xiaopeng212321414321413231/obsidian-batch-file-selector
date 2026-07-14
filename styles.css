@@ -1,0 +1,372 @@
+/* ═══════════════════════════════════════════════════════
+   Batch File Selector — Premium Styles
+   Obsidian 批量文件选择插件样式
+   ═══════════════════════════════════════════════════════ */
+
+/* ─── CSS 变量 ───────────────────────────────────────── */
+:root {
+  --batch-accent: var(--interactive-accent, #7c3aed);
+  --batch-accent-hover: var(--interactive-accent-hover, #6d28d9);
+  --batch-danger: #ef4444;
+  --batch-danger-hover: #dc2626;
+  --batch-toolbar-height: 52px;
+  --batch-toolbar-bg: var(--background-secondary, #f8fafc);
+  --batch-toolbar-border: var(--background-modifier-border, #e2e8f0);
+  --batch-checkbox-size: 20px;
+  --batch-transition: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─── 文件浏览器批量模式 ─────────────────────────────── */
+.batch-mode {
+  padding-bottom: calc(var(--batch-toolbar-height) + 16px) !important;
+}
+
+/* ─── Checkbox 容器 ──────────────────────────────────── */
+.batch-checkbox-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--batch-checkbox-size);
+  height: var(--batch-checkbox-size);
+  min-width: var(--batch-checkbox-size);
+  margin-right: 8px;
+  flex-shrink: 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ─── Checkbox 样式 ──────────────────────────────────── */
+.batch-checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--text-muted);
+  border-radius: 5px;
+  background: transparent;
+  transition: all var(--batch-transition);
+  opacity: 0.5;
+}
+
+.batch-checkbox svg {
+  width: 14px;
+  height: 14px;
+  color: #fff;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: all var(--batch-transition);
+}
+
+.batch-checkbox.checked {
+  background: var(--batch-accent);
+  border-color: var(--batch-accent);
+  opacity: 1;
+}
+
+.batch-checkbox.checked svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ─── 选中的文件项 ───────────────────────────────────── */
+.tree-item.batch-selected {
+  background: rgba(124, 58, 237, 0.08) !important;
+  border-radius: 6px;
+  outline: 1.5px solid rgba(124, 58, 237, 0.3);
+  outline-offset: -1px;
+}
+
+.tree-item.batch-selected .tree-item-inner {
+  color: var(--batch-accent);
+  font-weight: 500;
+}
+
+/* ─── 工具栏 ─────────────────────────────────────────── */
+.batch-toolbar {
+  position: fixed;
+  bottom: 0;
+  left: var(--ribbon-width, 0px);
+  right: 0;
+  height: var(--batch-toolbar-height);
+  background: var(--batch-toolbar-bg);
+  border-top: 1px solid var(--batch-toolbar-border);
+  z-index: 1000;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(12px);
+}
+
+.batch-toolbar.visible {
+  transform: translateY(0);
+}
+
+.batch-toolbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 20px;
+  max-width: 100%;
+  gap: 16px;
+}
+
+/* ─── 工具栏左侧 ─────────────────────────────────────── */
+.batch-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.batch-toolbar-icon {
+  font-size: 18px;
+}
+
+.batch-toolbar-count {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-normal);
+  white-space: nowrap;
+}
+
+#batch-count {
+  color: var(--batch-accent);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* ─── 工具栏按钮组 ───────────────────────────────────── */
+.batch-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  flex-shrink: 1;
+}
+
+.batch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border: 1px solid var(--batch-toolbar-border);
+  border-radius: 8px;
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--batch-transition);
+  white-space: nowrap;
+  font-family: inherit;
+  outline: none;
+}
+
+.batch-btn:hover {
+  background: var(--background-modifier-hover);
+  border-color: var(--batch-accent);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.batch-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.batch-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.batch-btn svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+/* ─── 各按钮颜色 ─────────────────────────────────────── */
+.batch-btn-move:hover {
+  color: var(--batch-accent);
+  border-color: var(--batch-accent);
+  background: rgba(124, 58, 237, 0.06);
+}
+
+.batch-btn-copy-path:hover {
+  color: #3b82f6;
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.batch-btn-tag:hover {
+  color: #f59e0b;
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.06);
+}
+
+.batch-btn-delete {
+  color: var(--batch-danger);
+  border-color: var(--batch-danger);
+  background: rgba(239, 68, 68, 0.04);
+}
+
+.batch-btn-delete:hover {
+  color: #fff;
+  background: var(--batch-danger);
+  border-color: var(--batch-danger);
+}
+
+/* ─── 工具栏分隔线 ───────────────────────────────────── */
+.batch-toolbar-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--batch-toolbar-border);
+  margin: 0 4px;
+}
+
+/* ─── 取消按钮 ───────────────────────────────────────── */
+.batch-btn-cancel {
+  color: var(--text-muted);
+  border-color: transparent;
+  background: transparent;
+}
+
+.batch-btn-cancel:hover {
+  color: var(--text-normal);
+  background: var(--background-modifier-hover);
+  border-color: var(--batch-toolbar-border);
+}
+
+/* ─── 树形项目 hover 增强 ────────────────────────────── */
+.batch-mode .tree-item:hover {
+  background: var(--background-modifier-hover);
+}
+
+.batch-mode .tree-item:hover .batch-checkbox:not(.checked) {
+  opacity: 0.8;
+  border-color: var(--text-muted);
+}
+
+/* ─── 适配移动端 ─────────────────────────────────────── */
+.is-mobile .batch-toolbar {
+  left: 0;
+  height: 60px;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.is-mobile .batch-btn {
+  padding: 9px 12px;
+  font-size: 13px;
+  gap: 4px;
+}
+
+.is-mobile .batch-btn span {
+  display: none;
+}
+
+.is-mobile .batch-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.is-mobile .batch-toolbar-inner {
+  padding: 0 12px;
+}
+
+/* ─── 状态栏指示器 ───────────────────────────────────── */
+.batch-status-active {
+  color: var(--batch-accent) !important;
+  font-weight: 600;
+  animation: batch-status-pulse 2s ease-in-out infinite;
+}
+
+@keyframes batch-status-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ─── 标签输入弹窗 ───────────────────────────────────── */
+.batch-tag-input:focus {
+  outline: none;
+  border-color: var(--batch-accent) !important;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+}
+
+/* ─── 响应式调整 ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  .batch-toolbar-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 10px 14px;
+  }
+
+  .batch-toolbar {
+    height: auto;
+    min-height: var(--batch-toolbar-height);
+  }
+
+  .batch-toolbar-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* ─── 深色主题微调 ───────────────────────────────────── */
+.theme-dark .batch-toolbar {
+  background: rgba(30, 30, 40, 0.95);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.theme-dark .batch-checkbox {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.theme-dark .tree-item.batch-selected {
+  background: rgba(124, 58, 237, 0.15) !important;
+  outline-color: rgba(124, 58, 237, 0.5);
+}
+
+.theme-dark .batch-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.theme-dark .batch-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ─── 动画增强 ───────────────────────────────────────── */
+@keyframes batch-check-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.batch-checkbox-wrapper {
+  animation: batch-check-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 为不同位置的 checkbox 添加错开的入场动画 */
+.tree-item:nth-child(1) .batch-checkbox-wrapper { animation-delay: 0.02s; }
+.tree-item:nth-child(2) .batch-checkbox-wrapper { animation-delay: 0.04s; }
+.tree-item:nth-child(3) .batch-checkbox-wrapper { animation-delay: 0.06s; }
+.tree-item:nth-child(4) .batch-checkbox-wrapper { animation-delay: 0.08s; }
+.tree-item:nth-child(5) .batch-checkbox-wrapper { animation-delay: 0.10s; }
+.tree-item:nth-child(6) .batch-checkbox-wrapper { animation-delay: 0.12s; }
+.tree-item:nth-child(7) .batch-checkbox-wrapper { animation-delay: 0.14s; }
+.tree-item:nth-child(8) .batch-checkbox-wrapper { animation-delay: 0.16s; }
+.tree-item:nth-child(9) .batch-checkbox-wrapper { animation-delay: 0.18s; }
+.tree-item:nth-child(10) .batch-checkbox-wrapper { animation-delay: 0.20s; }
+.tree-item:nth-child(n+11) .batch-checkbox-wrapper { animation-delay: 0.22s; }

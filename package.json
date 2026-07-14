@@ -1,0 +1,21 @@
+{
+  "name": "obsidian-batch-file-selector",
+  "version": "1.0.0",
+  "description": "Obsidian 批量文件选择插件 - 长按右键批量选择文件",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
+    "version": "node version-bump.mjs && git add manifest.json versions.json"
+  },
+  "keywords": ["obsidian", "plugin", "batch", "file-selector"],
+  "author": "彭采士",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "builtin-modules": "^3.3.0",
+    "esbuild": "^0.20.0",
+    "obsidian": "latest",
+    "typescript": "^5.3.0"
+  }
+}
