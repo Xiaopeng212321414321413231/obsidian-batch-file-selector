@@ -143,8 +143,7 @@ export default class BatchFileSelectorPlugin extends Plugin {
             if (this.isRightButtonDown && !this.holdTriggered) {
               this.holdTriggered = true;
               this.enterBatchMode();
-              // 阻止后续的 contextmenu
-              this.preventNextContextMenu();
+              // onContextMenu 会在批量模式下自动接管，无需额外拦截
             }
           }, this.settings.holdDuration);
         }
@@ -161,39 +160,53 @@ export default class BatchFileSelectorPlugin extends Plugin {
       };
 
       const onContextMenu = (e: MouseEvent) => {
-        // 批量模式下阻止默认右键菜单
+        // 批量模式下显示自定义右键菜单
         if (this.isBatchMode) {
           e.preventDefault();
-          e.stopPropagation();
+          e.stopPropagation(); // 只阻止冒泡，不影响同级其他监听器
           this.showBatchContextMenu(e);
           return;
         }
-        // 如果长按触发了，阻止这次右键菜单
+        // 如果长按触发了批量模式，阻止这次右键菜单
         if (this.holdTriggered) {
           e.preventDefault();
           e.stopPropagation();
         }
       };
 
-      // 点击处理（批量选择模式下的文件点击）
+      // 点击处理（批量选择模式下的点击——只拦截文件，文件夹照常展开）
       const onClick = (e: MouseEvent) => {
         if (!this.isBatchMode) return;
 
         const target = e.target as HTMLElement;
-        const fileItem = target.closest(".tree-item") as HTMLElement;
-        if (!fileItem) return;
+        const treeItem = target.closest(".tree-item") as HTMLElement;
+        if (!treeItem) return;
 
-        // 阻止默认导航行为
+        // ★ 关键：判断是文件夹还是文件
+        const isFolder =
+          treeItem.classList.contains("nav-folder") ||
+          !!treeItem.querySelector(".nav-folder-title");
+
+        // 点击的是 checkbox → 一定拦截，用于切换选中状态
+        if (target.closest(".batch-checkbox-wrapper")) {
+          e.preventDefault();
+          e.stopPropagation();
+          const path = this.getFilePathFromElement(treeItem);
+          if (path) this.toggleItemSelection(treeItem, path);
+          return;
+        }
+
+        // 文件夹 → 完全放行，让 Obsidian 处理展开/折叠
+        if (isFolder) {
+          return;
+        }
+
+        // 文件 → 拦截点击用于选中（不打开文件）
         e.preventDefault();
-        e.stopImmediatePropagation();
-
-        // 处理选择
-        this.handleFileClick(fileItem, e.shiftKey, e.ctrlKey || e.metaKey);
-
-        // 如果点击的是 checkbox 区域，切换选中状态
-        const checkbox = target.closest(".batch-checkbox-wrapper");
-        if (checkbox) {
-          // 已经处理过了
+        e.stopPropagation(); // stopPropagation 而非 stopImmediatePropagation，不影响其他插件
+        const path = this.getFilePathFromElement(treeItem);
+        if (path) {
+          this.handleFileClick(treeItem, e.shiftKey, e.ctrlKey || e.metaKey);
         }
       };
 
@@ -235,16 +248,6 @@ export default class BatchFileSelectorPlugin extends Plugin {
     };
 
     tryRegister();
-  }
-
-  // ─── 阻止下一次 contextmenu ──────────────────────────
-  private preventNextContextMenu() {
-    const handler = (e: MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      document.removeEventListener("contextmenu", handler, true);
-    };
-    document.addEventListener("contextmenu", handler, true);
   }
 
   // ─── 进入批量选择模式 ───────────────────────────────
